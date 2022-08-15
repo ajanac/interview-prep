@@ -51,7 +51,8 @@ Sort and print the output array.**/
 
 // Java program to merge k sorted arrays of size n each.
 
-object MergeSortSolutionOne {
+object MergeSortSolutionOne
+{
 
   // This function takes an array of arrays as an argument
   // and
