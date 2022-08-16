@@ -15,7 +15,7 @@ object Pair
       input.indices.foreach{ i =>
         Range(0, i).foreach{ j =>
           if (i + j == 10)
-            println(s"${input(i)}, ${input(j)}")
+            print(s"(${input(i)},${input(j)})")
         }
       }
     }
@@ -37,6 +37,7 @@ object PrintPair extends App
 {
   val input = List(1,2,3,4,5,6,7,8,9)
   Pair.printPair(input)
+  println
   println("*******")
   Pair.printPairOptimize(input)
 }
