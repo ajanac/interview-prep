@@ -46,62 +46,70 @@ Algorithm:
 Create a output array of size n * k.
 Traverse the matrix from start to end and insert all the elements in output array.
 Sort and print the output array.**/
-
  * */
-
-// Java program to merge k sorted arrays of size n each.
-
-object MergeSortSolutionOne
+object MergeKSortedLinkedList
 {
+  // https://www.youtube.com/watch?v=q5a5OiGbT6Q&t=88s
+  // First solution is O(n * k )
+  // Optimized solution nlogK
+  def mergeKLists(lists: List[ListNode]): ListNode =
+    {
+      if (lists != null || lists.isEmpty) return null
+      var tempLists = lists
+      val listLen = tempLists.length
 
-  // This function takes an array of arrays as an argument
-  // and
-  // All arrays are assumed to be sorted. It merges them
-  // together and prints the final sorted output.
-  def mergeKArrays(arr: Array[Array[Int]], a: Int, outputTemp: Array[Int]): Unit = {
-    var output = outputTemp
-    // traverse the matrix
-    Range(0, a).foreach { i =>
-      Range(0, 4).foreach { j =>
-        output = arr(i)
-      }
+      while(listLen > 1)
+        {
+          val mergedList = scala.collection.mutable.ListBuffer[ListNode]()
+          Range(0, listLen, 2).foreach{i =>
+            val l1 = tempLists(i)
+            val l2 = {if (i + 1 < listLen) tempLists(i + 1) else ListNode(-9)}
+            mergedList.append(mergeTwoLists(l1, l2))
+          }
+          tempLists = mergedList.toList
+        }
+      tempLists.head
     }
-    // sort the array
-    output.sorted
-  }
 
-  // A utility function to print array elements
-  def printArray(arr: Array[Int]): Unit = {
-    arr.indices.foreach { i =>
-      print(s"${arr(i)} ")
+  private def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode =
+    {
+      val dummy = ListNode()
+      var tail = dummy
+      var l1Temp = l1
+      var l2Temp = l2
+
+      while(l1Temp != null && l2Temp != null)
+        {
+          if (l1Temp.value < l2Temp.value)
+          {
+            tail.next = l1Temp
+            l1Temp = l1Temp.next
+          }
+          else
+            {
+              tail.next = l2Temp
+              l2Temp = l2Temp.next
+            }
+          tail = tail.next
+        }
+        if (l1Temp != null)
+            tail.next = l1Temp
+        if (l2Temp != null)
+            tail.next = l2Temp
+      dummy.next
     }
-  }
 }
 
-
-// Driver program to test above functions
 object MergeKSorted extends App
 {
-  /**
-   * Complexity Analysis:
-  Time Complexity :O(n*k*log(n*k)).
-  since resulting array is of N*k size.
-  Space Complexity :O(n*k), The output array is of size n*k.
-   */
-  val arr = Array(
-    Array(2, 6, 12, 34),
-    Array(1, 9, 20, 1000),
-    Array(3, 34, 90, 2000)
-  )
-  val k = 4
-  val n = 3
-  val output = Array.ofDim[Int](n* k)
+  val listA = ListNode(5, ListNode(10, ListNode(15, null)))
+  val listB = ListNode(2, ListNode(3, ListNode(10, null)))
 
- MergeSortSolutionOne.mergeKArrays(arr, n, output)
-  println("Merged Array is ")
-  MergeSortSolutionOne.printArray(output)
-
-  // Output:
-  //  Merged array is
-  //  1 2 6 9 12 20 23 34 34 90 1000 2000
+  val outputList = MergeKSortedLinkedList.mergeKLists(List(listA, listB))
+  val util = new ListNode(-9)
+  util.printList(listB)
+  util.printList(listA)
+  util.printList(outputList)
+  // need to come back , the result is giving null instead of actual output
+  println(outputList)
 }
