@@ -15,21 +15,21 @@ package august
             Output: [1,1,2,3,4,4]
  * */
 class ListNode(val value: Int, var next: ListNode = null)
-{
-  def printList(listNode: ListNode): Unit =
-    {
-      var node = listNode
-      while (node != null)
-        {
-          print(s"${node.value} ")
-          node = node.next
-        }
-        println()
-    }
-}
+
 object ListNode
 {
  def apply(value: Int = -999, next: ListNode = null) = new ListNode(value, next)
+
+  def printList(listNode: ListNode): Unit =
+  {
+    var node = listNode
+    while (node != null)
+    {
+      print(s"${node.value} ")
+      node = node.next
+    }
+    println()
+  }
 }
 
 object SolutionSortedTwoList
@@ -69,11 +69,12 @@ object MergeTwoSortedList extends App
   // Create 2 lists &&  Add elements to the list in sorted order
   val listA = ListNode(5, ListNode(10, ListNode(15, null)))
   val listB = ListNode(2, ListNode(3, ListNode(10, null)))
-
+  ListNode.printList(listA)
+  ListNode.printList(listB)
   // Call the merge function
   val mergedList = SolutionSortedTwoList.mergetTwoList(listA, listB)
-
   // Display merged list
   println("Merged Linked List is:")
-  mergedList.printList(mergedList)
+  println("*****************")
+  ListNode.printList(mergedList)
 }

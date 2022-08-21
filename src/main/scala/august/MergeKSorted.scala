@@ -54,16 +54,15 @@ object MergeKSortedLinkedList
   // Optimized solution nlogK
   def mergeKLists(lists: List[ListNode]): ListNode =
     {
-      if (lists != null || lists.isEmpty) return null
+      if (lists == null || lists.isEmpty) return null
       var tempLists = lists
-      val listLen = tempLists.length
 
-      while(listLen > 1)
+      while(tempLists.length > 1)
         {
           val mergedList = scala.collection.mutable.ListBuffer[ListNode]()
-          Range(0, listLen, 2).foreach{i =>
+          Range(0, tempLists.length, 2).foreach{i =>
             val l1 = tempLists(i)
-            val l2 = {if (i + 1 < listLen) tempLists(i + 1) else ListNode(-9)}
+            val l2 = {if (i + 1 < tempLists.length) tempLists(i + 1) else null}
             mergedList.append(mergeTwoLists(l1, l2))
           }
           tempLists = mergedList.toList
@@ -102,14 +101,15 @@ object MergeKSortedLinkedList
 
 object MergeKSorted extends App
 {
-  val listA = ListNode(5, ListNode(10, ListNode(15, null)))
-  val listB = ListNode(2, ListNode(3, ListNode(10, null)))
+  val listOne = ListNode(1, ListNode(2, ListNode(5, null)))
+  val listTwo = ListNode(3, ListNode(4, ListNode(10, null)))
+  val listThree = ListNode(6, ListNode(8, null))
 
-  val outputList = MergeKSortedLinkedList.mergeKLists(List(listA, listB))
-  val util = new ListNode(-9)
-  util.printList(listB)
-  util.printList(listA)
-  util.printList(outputList)
-  // need to come back , the result is giving null instead of actual output
-  println(outputList)
+  ListNode.printList(listOne)
+  ListNode.printList(listTwo)
+  ListNode.printList(listThree)
+  val outputList = MergeKSortedLinkedList.mergeKLists(List(listOne, listTwo, listThree))
+  println("******")
+  println("output")
+  ListNode.printList(outputList)
 }
