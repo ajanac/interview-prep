@@ -45,36 +45,34 @@ Constraints:
 
 object ImmediateSmallerSolutionOne
 {
-  def immeidateSmaller(input: Array[Int]): Array[Int] =
+  def immeidateSmaller(input: Array[Int]): Unit =
     {
       val len = input.length
-      val output = Array.fill[Int](len)(0)
        input.indices.foreach{i =>
          val j = i + 1
          if(j < len)
          {
            if(input(j) < input(i))
-             output(i) = input(j)
+             input(i) = input(j)
            else
-             output(i) = -1
+             input(i) = -1
          }
          if (i == len - 1)
-           output(i) = - 1
+           input(i) = - 1
       }
-      output
     }
 }
 
 object ImmediateSmaller extends App
 {
   val inputArr  = Array(4, 2, 1, 5, 3)
-  val outputArr = ImmediateSmallerSolutionOne.immeidateSmaller(inputArr)
-  println(outputArr.mkString(","))
+  ImmediateSmallerSolutionOne.immeidateSmaller(inputArr)
+  println(inputArr.mkString(","))
 //  Output:
 //    2 1 -1 3 -1
   val inputArrTwo  = Array(5, 6, 2, 3, 1, 7)
-  val outputArrTwo = ImmediateSmallerSolutionOne.immeidateSmaller(inputArrTwo)
-  println(outputArrTwo.mkString(","))
+  ImmediateSmallerSolutionOne.immeidateSmaller(inputArrTwo)
+  println(inputArrTwo.mkString(","))
 //  Output:
 //    -1 2 -1 1 -1 -1
 }
