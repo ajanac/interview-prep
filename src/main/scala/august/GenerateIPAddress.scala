@@ -114,11 +114,11 @@ object GenerateIPAddress extends App
 {
   val inputStr = "11211"
   val outputIPAddress = GenerateIPAddressNaiveSolution.genIP(inputStr)
- outputIPAddress.foreach(println(_))
+  outputIPAddress.foreach(println(_))
   /**output
   1.1.2.11
   1.1.21.1
   1.12.1.1
   11.2.1.1*/
-  // Need to comeb back for the optimized solution DP 
+  // Need to come back for the optimized solution DP
 }
