@@ -85,13 +85,13 @@ object AlternativePosNegNumbers extends App
   val inputArr = Array(9, 4, -2, -1, 5, 0, -5, -3, 2)
   val output   = AlternativePosNegNumbersNaiveSolution.rearrange(inputArr)
   println(output.mkString(" "))
-  //output:
+  //output
   // 9 -2 4 -1 5 -5 0 -3 2
   println("************")
   val inputArr2 = Array(-5, -2, 5, 2, 4, 7, 1, 8, 0, -8)
   val output2   = AlternativePosNegNumbersNaiveSolution.rearrange(inputArr2)
   println(output2.mkString(" "))
-  //output:
+  //output
   //5 -5 2 -2 4 -8 7 1 8 0
   //optimal solution will come back. Solution with O(1) space complexity
 }
