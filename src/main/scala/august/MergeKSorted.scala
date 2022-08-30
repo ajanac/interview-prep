@@ -99,6 +99,41 @@ object MergeKSortedLinkedList
     }
 }
 
+/**
+   *  Create a min heap that bubbles the ListNode with minimum data value to the top of the heap: val minHeap = mutable.PriorityQueue[ListNode]()(Ordering.by(-_.data))
+      Add the head nodes of all the linked lists to the min heap: lists.filter(_ != null).foreach(n => minHeap.enqueue(n)).
+      Create a new dummy head ListNode and an iterator node: val dummyHead = ListNode(0), var iterator = dummyHead.
+      Loop until the heap is empty: while (minHeap.nonEmpty) {...}.
+      Dequeue the top of the heap, which will return the list node with minimum data from what's on the heap: val node = minHeap.dequeue.
+      Set the next reference of iterator to point to the newly dequeued list node: iterator.next = node.
+      Next, if the next reference of the newly dequeued node is defined, add it to the min heap: if (node.next != null) minHeap.enqueue(node.next).
+      Finally, increment the iterator to point to the next node: iterator = iterator.next.
+      At the end of the loop, use dummyHead to return the head of the output linked list: return dummyHead.next.
+      k sorted list of average length n
+      Time complexity: O(n * K * logk)
+      Space complexity: O(k)
+ */
+import scala.collection.mutable
+
+object MergeKSortMinHeapSolution
+{
+
+
+  def mergeLists(lists: List[ListNode]): ListNode = {
+    val minHeap = mutable.PriorityQueue[ListNode]()(Ordering.by(-_.value))
+    lists.filter(_ != null).foreach(n => minHeap.enqueue(n))
+    val dummyHead = ListNode(0)
+    var iterator = dummyHead
+    while (minHeap.nonEmpty) {
+      val node = minHeap.dequeue
+      iterator.next = node
+      if (node.next != null) minHeap.enqueue(node.next)
+      iterator = iterator.next
+    }
+    dummyHead.next
+  }
+}
+
 object MergeKSorted extends App
 {
   val listOne = ListNode(1, ListNode(2, ListNode(5, null)))
@@ -112,4 +147,14 @@ object MergeKSorted extends App
   println("******")
   println("output")
   ListNode.printList(outputList)
+
+  val listA = ListNode(1, ListNode(2, ListNode(5, null)))
+  val listB = ListNode(3, ListNode(4, ListNode(10, null)))
+  val listC = ListNode(6, ListNode(8, null))
+
+  val outputMinHeap = MergeKSortMinHeapSolution.mergeLists(List(listA, listB, listC))
+  println("********")
+  println("output")
+  println("******")
+  ListNode.printList(outputMinHeap)
 }
