@@ -123,21 +123,23 @@ object GenerateIPAddressNaiveSolution
  *          We start from the bottom left corner of the 2D dp array.
  *          We only iterate 12 times(worst case) but those also will be the valid IP addresses because we only form valid IP addresses.
  */
+import scala.collection.mutable
 import scala.util.control.Breaks._
 
 object GenerateIPAddressEfficientSolution
 {
-  val list = scala.collection.mutable.ArrayBuffer[String]()
+  val list = mutable.ArrayBuffer[String]()
 
-  def restoreIpAddresses(s: String): Array[String] =
+  def restoreIpAddresses(s: String): mutable.ArrayBuffer[String] =
     {
       val n = s.length
-      if (n < 4 || n > 12) return list.toArray
-
+      if (n < 4 || n > 12) return list
       val dp = Array.ofDim[Int](4, n)
+
       Range(0, 4).foreach{i =>
         breakable{
-          Range(n - 1, 0, -1).foreach{j =>
+          for(j <- n - 1 to 0 by - 1)
+          {
             if (i == 0)
             {
               val sub = s.substring(j)
@@ -167,9 +169,9 @@ object GenerateIPAddressEfficientSolution
         }
       }
       if (dp(3)(0) == 0)
-        return list.toArray
+        return list
       createIpFromDP(dp, 3, 0, s, "")
-      list.toArray
+      list
     }
 
   private def createIpFromDP(dp: Array[Array[Int]], r: Int, c: Int, s: String, ans: String): Unit =
@@ -182,7 +184,7 @@ object GenerateIPAddressEfficientSolution
           return
         }
       (1 to 3).filter(c + _ < s.length).foreach{i =>
-        if (isValid(s.substring(c, c + i)) && dp(r - 1)(0) == 1)
+        if (isValid(s.substring(c, c + i)) && dp(r - 1)(c) == 1)
           {
             createIpFromDP(dp, r - 1, c + i, s, ans + s.substring(c, c + i) + ".")
           }
@@ -214,6 +216,7 @@ object GenerateIPAddress extends App
   11.2.1.1*/
   println("***********")
   val output = GenerateIPAddressEfficientSolution.restoreIpAddresses("25525511135")
+  println(output.length)
   // output is empty need to come back to fix it
   /**output
    * [255.255.11.135, 255.255.111.35]
