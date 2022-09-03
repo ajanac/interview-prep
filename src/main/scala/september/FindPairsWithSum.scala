@@ -1,5 +1,6 @@
 package september
 
+import scala.collection.mutable.ArrayBuffer
 /**
  * @author : ajanasathian
  * @mailto : ajanacs@gmail.com
@@ -37,6 +38,19 @@ package september
             Constraints:
             1 <= N <= 105
             1 <= target <= 105
+            **************
+ *          Efficient Solution
+ *          ******************
+            Initialize two pointer variables to find the candidate elements in the sorted doubly linked list.
+            Initialize first with the start of the doubly linked list i.e; first=head and initialize
+            second with the last node of the doubly linked list i.e; second=last_node.
+            We initialize first and second pointers as first and last nodes.
+            Here we don’t have random access, so to find the second pointer, we traverse the list to initialize the second.
+            If current sum of first and second is less than x, then we move first in forward
+            direction. If current sum of first and second element is greater than x, then we move second in backward direction.
+            Loop termination conditions are also different from arrays.
+            The loop terminates when two pointers cross each other (second->next = first), or they become the same (first == second).
+            The case when no pairs are present will be handled by the condition “first==second”
  * */
 
 class DoublyLinkedList
@@ -101,11 +115,11 @@ class DoublyLinkedList
       println()
     }
 
-  def findParisWithGivenSum( target: Int) : Array[(Int, Int)] =
+  def findParisWithGivenSumNaive(target: Int) : Array[(Int, Int)] =
   {
     var currIterator = head
     var nextIterator: Node = null
-    val output = scala.collection.mutable.ArrayBuffer[(Int, Int)]()
+    val output = ArrayBuffer[(Int, Int)]()
 
     while(currIterator != null)
     {
@@ -122,6 +136,49 @@ class DoublyLinkedList
     }
     output.toArray
     }
+
+  def findParisWithGivenSumOptimized(target: Int): Array[(Int, Int)] =
+  {
+    val output = ArrayBuffer[(Int, Int)]()
+    // Set two pointers, first
+    // to the beginning of DLL
+    // and second to the end of DLL.
+    var first = head
+    var second = head
+    while (second.next != null)
+      second = second.next
+
+    // To track if we find a pair or not
+    var found = false
+
+    // The loop terminates when
+    // they cross each other (second.next
+    // == first), or they become same
+    // (first == second)
+    while(first != second && second.next != first)
+    {
+      // pair found
+      if ((first.item + second.item) == target)
+      {
+        found = true
+        output.append((first.item, second.item))
+        // move first in forward direction
+        first = first.next
+        // move second in backward direction
+        second = second.previous
+      }
+      else
+      {
+        if ((first.item + second.item) < target)
+          first = first.next
+        else
+          second = second.previous
+      }
+    }
+    // if pair is not present
+    if (!found) println("No pair found")
+    output.toArray
+  }
 }
 
 object FindPairsWithSum extends App
@@ -135,8 +192,14 @@ object FindPairsWithSum extends App
   dl_List.addNode(8)
   dl_List.addNode(9)
   dl_List.printNodes()
-  val output = dl_List.findParisWithGivenSum(7)
+  println("Output of Naive Approach")
+  println("************************")
+  val output   = dl_List.findParisWithGivenSumNaive(7)
   println(output.mkString(" "))
+  println("Output of Optimized Approach")
+  println("****************************")
+  val output_2 = dl_List.findParisWithGivenSumOptimized(7)
+  println(output_2.mkString(" "))
 //  1 <-> 2 <-> 4 <-> 5 <-> 6 <-> 8 <-> 9
 //  target = 7
 //  Output: (1, 6), (2,5)
