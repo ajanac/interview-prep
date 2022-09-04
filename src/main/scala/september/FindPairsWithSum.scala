@@ -204,6 +204,6 @@ object FindPairsWithSum extends App
 //  target = 7
 //  Output: (1, 6), (2,5)
 //  Explanation: We can see that there are two pairs
-//    (1, 6) and (2,5) with sum 7.
+//  (1, 6) and (2,5) with sum 7.
 
 }
