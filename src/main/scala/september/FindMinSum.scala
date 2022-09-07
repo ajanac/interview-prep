@@ -64,7 +64,7 @@ object FindMinSumSolution
      * @param a
      * @param b
      * @param n
-     * @return Returns minimum possible pairwis, absolute difference of two arrays.
+     * @return Returns minimum possible pairwise, absolute difference of two arrays.
      */
     def findMinSum(a: Array[Long], b: Array[Long], n: Long): Long =
     {
