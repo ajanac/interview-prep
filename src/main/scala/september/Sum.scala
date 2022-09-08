@@ -132,5 +132,5 @@ Sum of 3 smallest elements are:
   binarySearchTree.root.right = SumSolution.Node(22)
   val k = 3
   println(binarySearchTree.sum(k))
-  // This solution is space complexity is O(n) not O(1). Need to come back later to implement the recursion solution
+  // This solution is space complexity O(n) not O(1). Need to come back later to implement the recursion solution
 }
