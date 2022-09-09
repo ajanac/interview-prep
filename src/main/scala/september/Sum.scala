@@ -214,17 +214,17 @@ object Sum extends App
      */
 
   var root = SumOptimizedSolutionOne.Node(-9)
-  root = SumOptimizedSolutionOne.Node(20, root)
-  root = SumOptimizedSolutionOne.Node(8, root)
-  root = SumOptimizedSolutionOne.Node(4, root)
-  root = SumOptimizedSolutionOne.Node(12, root)
-  root = SumOptimizedSolutionOne.Node(10, root)
-  root = SumOptimizedSolutionOne.Node(14, root)
-  root = SumOptimizedSolutionOne.Node(22, root)
+  root = SumOptimizedSolutionOne.insert(root, 20)
+  root = SumOptimizedSolutionOne.insert(root, 8)
+  root = SumOptimizedSolutionOne.insert(root, 4)
+  root = SumOptimizedSolutionOne.insert(root, 12)
+  root = SumOptimizedSolutionOne.insert(root, 10)
+  root = SumOptimizedSolutionOne.insert(root, 14)
+  root = SumOptimizedSolutionOne.insert(root, 22)
 
   val k_1 = 3
   val count = SumOptimizedSolutionOne.kSmallestElementSum(root, k_1)
   println(count)
   // output is not correct for optimized solution. Need to come back and correct it
-//  https://www.geeksforgeeks.org/sum-k-smallest-elements-bst/
+ // https://www.geeksforgeeks.org/sum-k-smallest-elements-bst/
 }
