@@ -54,6 +54,7 @@ package september
             1<=K<=N
  * */
 import scala.collection.mutable
+
 object SumSolution
 {
   class Node(val data: Int, var left: Node = null, var right: Node = null)
@@ -100,26 +101,95 @@ object SumSolution
       }
   }
 }
+
+/**
+ *  The idea is to traverse BST in inorder traversal.
+ *  Note that Inorder traversal of BST accesses elements in sorted (or increasing) order.
+ *  While traversing, we keep track of count of visited Nodes and keep adding Nodes until the count becomes k.
+ *  Time complexity : O(k)
+ */
+object SumOptimizedSolutionOne
+{
+  //Binary tree Node
+  class Node(val data: Int, var left: Node, var right: Node)
+  object Node
+  {
+    def apply(data: Int, left: Node = null, right: Node = null) = new Node(data, left, right)
+  }
+
+  /**
+   * @param root
+   * @param key
+   * @return function to insert a new Node with given key in BST and also maintain lcount ,Sum
+   */
+  def insert(root: Node, key: Int): Node =
+  {
+    // If the tree is empty, return a new Node
+    if (root == null) Node(key)
+    // Otherwise, recur down the tree
+    else if (root.data > key) root.left = Node(key, root.left)
+    else if (root.data < key) root.right = Node(key, root.right)
+    // return the (unchanged) Node pointer
+    root
+  }
+
+    final private var count = 0
+
+  /**
+   * @param root
+   * @param k
+   * @return sum of all element smaller than and equal to Kth smallest element
+   */
+  private def kSmallestElementSumRec(root: Node, k: Int): Int =
+  {
+    // Base cases
+    if (root == null) return 0
+    if (count > k) return 0
+
+    // Compute sum of elements in left subtree
+    var res = kSmallestElementSumRec(root.left, k)
+    if (count >= k) return res
+
+    // Add root's data
+    res += root.data
+
+    // Add current Node
+    count += 1
+    if (count >= k) return res
+
+    // If count is less than k, return right substree nodes
+    res + kSmallestElementSumRec(root.right, k)
+  }
+
+  /**
+   * @param root
+   * @param k
+   * @return wrapper over kSmallestElementSumRec()
+   */
+  def kSmallestElementSum(root: Node, k: Int): Int =
+    kSmallestElementSumRec(root, k)
+}
+
 object Sum extends App
 {
   /**
-   *  Given a Binary Search Tree. Find sum of all elements smaller than and equal to Kth smallest element.
+         *  Given a Binary Search Tree. Find sum of all elements smaller than and equal to Kth smallest element.
 
-Example 1:
+      Example 1:
 
-Input:
-          20
-        /    \
-       8     22
-     /    \
-    4     12
-         /    \
-        10    14   , K=3
+      Input:
+                20
+              /    \
+             8     22
+           /    \
+          4     12
+               /    \
+              10    14   , K=3
 
-Output: 22
-Explanation:
-Sum of 3 smallest elements are:
-4 + 8 + 10 = 22
+      Output: 22
+      Explanation:
+      Sum of 3 smallest elements are:
+      4 + 8 + 10 = 22
    */
 
   val binarySearchTree = new SumSolution.BinarySearchTree()
@@ -132,5 +202,29 @@ Sum of 3 smallest elements are:
   binarySearchTree.root.right = SumSolution.Node(22)
   val k = 3
   println(binarySearchTree.sum(k))
-  // This solution is space complexity O(n) not O(1). Need to come back later to implement the recursion solution
+
+
+    /* 20
+      / \
+    8	 22
+    / \
+    4	 12
+      / \
+      10 14
+     */
+
+  var root = SumOptimizedSolutionOne.Node(-9)
+  root = SumOptimizedSolutionOne.Node(20, root)
+  root = SumOptimizedSolutionOne.Node(8, root)
+  root = SumOptimizedSolutionOne.Node(4, root)
+  root = SumOptimizedSolutionOne.Node(12, root)
+  root = SumOptimizedSolutionOne.Node(10, root)
+  root = SumOptimizedSolutionOne.Node(14, root)
+  root = SumOptimizedSolutionOne.Node(22, root)
+
+  val k_1 = 3
+  val count = SumOptimizedSolutionOne.kSmallestElementSum(root, k_1)
+  println(count)
+  // output is not correct for optimized solution. Need to come back and correct it
+//  https://www.geeksforgeeks.org/sum-k-smallest-elements-bst/
 }
