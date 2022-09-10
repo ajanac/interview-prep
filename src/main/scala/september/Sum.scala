@@ -65,7 +65,7 @@ object SumSolution
 
   class BinarySearchTree(var root: Node = null)
   {
-    private def inOrder(root: Node): List[Int] =
+    def inOrder(root: Node): List[Int] =
     {
       val out = mutable.ArrayBuffer[Int]()
       val stack = mutable.Stack[Node]()
@@ -125,15 +125,35 @@ object SumOptimizedSolutionOne
   def insert(root: Node, key: Int): Node =
   {
     // If the tree is empty, return a new Node
-    if (root == null) Node(key)
+    if (root == null) return Node(key)
     // Otherwise, recur down the tree
-    else if (root.data > key) root.left = Node(key, root.left)
-    else if (root.data < key) root.right = Node(key, root.right)
+    if (root.data > key) root.left = insert(root.left, key)
+    else if (root.data < key) root.right = insert(root.right, key)
     // return the (unchanged) Node pointer
     root
   }
 
-    final private var count = 0
+  def inOrder(root: Node): List[Int] =
+    {
+      val stack = new java.util.Stack[Node]()
+      val out   = mutable.ArrayBuffer[Int]()
+      var iterator = root
+
+      while (iterator != null || !stack.empty())
+        {
+          while (iterator != null)
+            {
+              stack.push(iterator)
+              iterator = iterator.left
+            }
+          iterator = stack.pop()
+          out.append(iterator.data)
+          iterator = iterator.right
+        }
+        out.toList
+    }
+
+  final private var count = 0
 
   /**
    * @param root
@@ -200,8 +220,11 @@ object Sum extends App
   binarySearchTree.root.left.right.left = SumSolution.Node(10)
   binarySearchTree.root.left.right.right = SumSolution.Node(14)
   binarySearchTree.root.right = SumSolution.Node(22)
+  println("________Values in Tree : Inorder________")
+  val datas = binarySearchTree.inOrder(binarySearchTree.root)
+  println(datas.mkString(" "))
   val k = 3
-  println(binarySearchTree.sum(k))
+  println(s"Output: ${binarySearchTree.sum(k)}")
 
 
     /* 20
@@ -212,19 +235,19 @@ object Sum extends App
       / \
       10 14
      */
-
-  var root = SumOptimizedSolutionOne.Node(-9)
-  root = SumOptimizedSolutionOne.insert(root, 20)
+  var root = SumOptimizedSolutionOne.insert(null, 20)
   root = SumOptimizedSolutionOne.insert(root, 8)
   root = SumOptimizedSolutionOne.insert(root, 4)
   root = SumOptimizedSolutionOne.insert(root, 12)
   root = SumOptimizedSolutionOne.insert(root, 10)
   root = SumOptimizedSolutionOne.insert(root, 14)
   root = SumOptimizedSolutionOne.insert(root, 22)
-
+  println("********Values in Tree : Inorder********")
+  val datas_o = SumOptimizedSolutionOne.inOrder(root)
+  println(datas_o.mkString(" "))
   val k_1 = 3
-  val count = SumOptimizedSolutionOne.kSmallestElementSum(root, k_1)
-  println(count)
-  // output is not correct for optimized solution. Need to come back and correct it
+  val sumOutput = SumOptimizedSolutionOne.kSmallestElementSum(root, k_1)
+  println(s"Output: ${sumOutput}")
+  // need to implement Time Complexity: O(h) where h is height of tree
  // https://www.geeksforgeeks.org/sum-k-smallest-elements-bst/
 }
