@@ -190,6 +190,125 @@ object SumOptimizedSolutionOne
     kSmallestElementSumRec(root, k)
 }
 
+/***
+ *      We can find the required sum in O(h) time where h is height of BST.
+ *      Idea is similar to Kth-th smallest element in BST .
+ *      augmented tree data structure to solve this problem efficiently in O(h) time [ h is height of BST ] .
+        **************
+        Algorithm :
+        **************
+        BST Node contain to extra fields : Lcount , Sum
+
+        For each Node of BST
+        lCount : store how many left child it has
+        Sum     : store sum of all left child it has
+
+        Find Kth smallest element
+        [ temp_sum store sum of all element less than equal to K ]
+
+        ksmallestElementSumRec(root, K, temp_sum)
+
+          IF root -> lCount == K + 1
+              temp_sum += root->data + root->sum;
+              break;
+          ELSE
+             IF k > root->lCount   // Goto right sub-tree
+                temp_sum += root->data + root-> sum;
+                ksmallestElementSumRec(root->right, K-root->lcount+1, temp_sum)
+             ELSE
+                // Goto left sun-tree
+                ksmallestElementSumRec( root->left, K, temp_sum)
+ */
+object SumOptimizedSolutionTwo
+{
+   // Binary tree Node
+   class Node(val data: Int, var left: Node, var right: Node, var lCount: Int, var sum: Int)
+   object Node
+    {
+     def apply(data: Int, left: Node = null, right: Node = null, lCount: Int = 0, sum: Int = 0) = new Node(data, left, right, lCount, sum)
+    }
+
+  /**
+   * @param root
+   * @param key
+   * @return A utility function to insert a new Node with, given key in BST and also maintain lcount ,Sum
+   */
+   def insert(root: Node, key: Int): Node =
+     {
+       // If the tree is empty, return a new Node
+       if (root == null) return Node(key)
+       // Otherwise, recur down the tree
+       if (root.data > key)
+         {
+           // Increment lCount of current Node
+           root.lCount += 1
+
+           // Increment current Node sum by adding key into it
+           root.sum += key
+
+           root.left = insert(root.left, key)
+         }
+       else if (root.data < key) root.right = insert(root.right, key)
+       // return the (unchanged) Node pointer
+       root
+     }
+
+   def inOrder(root: Node): List[Int] =
+     {
+       val stack = new java.util.Stack[Node]()
+       var iterator = root
+       val out = scala.collection.mutable.ArrayBuffer[Int]()
+       while (!stack.isEmpty || iterator!= null)
+         {
+           while (iterator != null)
+             {
+               stack.push(iterator)
+               iterator = iterator.left
+             }
+             iterator = stack.pop()
+             out.append(iterator.data)
+             iterator = iterator.right
+         }
+       out.toList
+     }
+
+   private final var tempSum = 0
+
+  /**
+   * @param root
+   * @param k
+   * @return function return sum of all element smaller than and equal, to Kth smallest element
+   */
+    private def kSmallestElementSumRec(root: Node, kTemp: Int): Unit =
+    {
+      var k = kTemp
+      if (root == null) return
+
+      // if we fount k smallest element then break the function
+      if ((root.lCount + 1) == k)
+      {
+        tempSum += root.data + root.sum
+      }
+      else if (k > root.lCount)
+      {
+        // store sum of all element smaller than current root ;
+        tempSum += root.data + root.sum
+
+        // decremented k and call right sub-tree
+        k = k -( root.lCount + 1);
+        kSmallestElementSumRec(root.right , k)
+      }
+      else // call left sub-tree
+        kSmallestElementSumRec(root.left , k)
+    }
+
+    // Wrapper over ksmallestElementSumRec()
+    def kSmallestElementSum(root: Node, k: Int): Int =
+      {
+        kSmallestElementSumRec(root, k)
+        tempSum
+      }
+}
 object Sum extends App
 {
   /**
@@ -248,6 +367,18 @@ object Sum extends App
   val k_1 = 3
   val sumOutput = SumOptimizedSolutionOne.kSmallestElementSum(root, k_1)
   println(s"Output: ${sumOutput}")
-  // need to implement Time Complexity: O(h) where h is height of tree
- // https://www.geeksforgeeks.org/sum-k-smallest-elements-bst/
+
+  var root_2 = SumOptimizedSolutionTwo.insert(null, 20)
+  root_2 = SumOptimizedSolutionTwo.insert(root_2, 8)
+  root_2 = SumOptimizedSolutionTwo.insert(root_2, 4)
+  root_2 = SumOptimizedSolutionTwo.insert(root_2, 12)
+  root_2 = SumOptimizedSolutionTwo.insert(root_2, 10)
+  root_2 = SumOptimizedSolutionTwo.insert(root_2, 14)
+  root_2 = SumOptimizedSolutionTwo.insert(root_2, 22)
+  println("********Values in Tree : Inorder********")
+  val datas_o2 = SumOptimizedSolutionTwo.inOrder(root_2)
+  println(datas_o2.mkString(" "))
+  val k_2 = 3
+  val sumOutput_2 = SumOptimizedSolutionTwo.kSmallestElementSum(root_2, k_2)
+  println(s"Output: ${sumOutput_2}")
 }
