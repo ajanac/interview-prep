@@ -182,7 +182,6 @@ object ConvertToMaxHeapUtil extends App
   root = ConvertToMaxHeapUtilSolution.insert(root, 5)
   root = ConvertToMaxHeapUtilSolution.insert(root, 7)
 
-
   ConvertToMaxHeapUtilSolution.convertToMaxHeapUtil(root);
   print("Postorder Traversal of Tree:" +"\n");
   ConvertToMaxHeapUtilSolution.postorderTraversal(root)
