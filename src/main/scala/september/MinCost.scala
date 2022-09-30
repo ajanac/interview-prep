@@ -89,126 +89,155 @@ package september
  */
 object MinCostSolution
 {
+  // A class for Min Heap  - Array of elements in heap: harr
+  //                         Current number of elements in min heap: heapSize
+  //                         maximum possible size of min heap: capacity
+  class MinHeap(harr: Array[Int], var heapSize: Int, capacity: Int)
+  {
+    // Constructor: Builds a heap from
+    // a given array a[] of given size
+    var i = (heapSize - 1) / 2
+    while (i >= 0)
+    {
+      minHeapify(i)
+      i -= 1
+    }
 
+    /**
+     * @param i
+     * A recursive method to heapify a subtree
+     * with the root at given index
+     * This method assumes that the subtrees
+     * are already heapified
+     */
+    private def minHeapify(i: Int): Unit =
+      {
+        val l = left(i)
+        val r = right(i)
+        var smallest = i
+        if (l < heapSize && harr(l) < harr(i)) smallest = l
+        if (r < heapSize && harr(r) < harr(smallest)) smallest = r
+        if (smallest != i)
+          {
+            swap(i, smallest)
+            minHeapify(smallest)
+          }
+      }
 
-    //      // A class for Min Heap
-    //      class MinHeap(harr: Array[Int], val heap_size: Int, capacity: Int)
-    //      object MinHeap
-    //      {
-    //        def apply(a: Array[Int], size: Int): MinHeap =
-    //          {
-    //            val minHeap = new MinHeap(harr = a, heap_size = size, capacity = size)
-    //            val i = (minHeap.heap_size - 1) / 2
-    //            minHeap
-    //          }
-    //      }
-    //      class MinHeap {
-    //        int[] harr; // Array of elements in heap
-    //        int heap_size; // Current number of elements in min heap
-    //        int capacity; // maximum possible size of min heap
-    //
-    //        // Constructor: Builds a heap from
-    //        // a given array a[] of given size
-    //        public MinHeap(int a[], int size)
-    //        {
-    //          heap_size = size;
-    //          capacity = size;
-    //          harr = a;
-    //          int i = (heap_size - 1) / 2;
-    //          while (i >= 0) {
-    //            MinHeapify(i);
-    //            i--;
-    //          }
-    //        }
-    //
-    //        // A recursive method to heapify a subtree
-    //        // with the root at given index
-    //        // This method assumes that the subtrees
-    //        // are already heapified
-    //        void MinHeapify(int i)
-    //        {
-    //          int l = left(i);
-    //          int r = right(i);
-    //          int smallest = i;
-    //          if (l < heap_size && harr[l] < harr[i])
-    //            smallest = l;
-    //          if (r < heap_size && harr[r] < harr[smallest])
-    //            smallest = r;
-    //          if (smallest != i) {
-    //            swap(i, smallest);
-    //            MinHeapify(smallest);
-    //          }
-    //        }
-    //
-    //        int parent(int i) { return (i - 1) / 2; }
-    //
-    //        // to get index of left child of node at index i
-    //        int left(int i) { return (2 * i + 1); }
-    //
-    //        // to get index of right child of node at index i
-    //        int right(int i) { return (2 * i + 2); }
-    //
-    //        // Method to remove minimum element (or root) from min
-    //        // heap
-    //        int extractMin()
-    //        {
-    //          if (heap_size <= 0)
-    //            return Integer.MAX_VALUE;
-    //          if (heap_size == 1) {
-    //            heap_size--;
-    //            return harr[0];
-    //          }
-    //
-    //          // Store the minimum value, and remove it from heap
-    //          int root = harr[0];
-    //          harr[0] = harr[heap_size - 1];
-    //          heap_size--;
-    //          MinHeapify(0);
-    //
-    //          return root;
-    //        }
-    //
-    //        // Inserts a new key 'k'
-    //        void insertKey(int k)
-    //        {
-    //          if (heap_size == capacity) {
-    //            System.out.println(
-    //              "Overflow: Could not insertKey");
-    //            return;
-    //          }
-    //
-    //          // First insert the new key at the end
-    //          heap_size++;
-    //          int i = heap_size - 1;
-    //          harr[i] = k;
-    //
-    //          // Fix the min heap property if it is violated
-    //          while (i != 0 && harr[parent(i)] > harr[i]) {
-    //          swap(i, parent(i));
-    //          i = parent(i);
-    //        }
-    //        }
-    //
-    //        // A utility function to check
-    //        // if size of heap is 1 or not
-    //        boolean isSizeOne() { return (heap_size == 1); }
-    //
-    //        // A utility function to swap two elements
-    //        void swap(int x, int y)
-    //        {
-    //          int temp = harr[x];
-    //          harr[x] = harr[y];
-    //          harr[y] = temp;
-    //        }
+    /**
+     * @param i
+     * @return index of the parent node
+     */
+    private def parent(i: Int): Int = (i - 1) / 2
 
+    /**
+     * @param i
+     * @return index of left child of the node at index i
+     */
+    private def left(i: Int): Int = (2 * i + 1)
+
+    /**
+     * @param i
+     * @return index of right child of node at index
+     */
+    private def right(i: Int): Int  = (2 * i + 2)
+
+    /**
+     * @return minimum element (or root) from min heap
+     */
+    private def extractMin(): Int =
+    {
+      if (heapSize <= 0) return Integer.MAX_VALUE
+      if (heapSize == 1)
+        {
+          heapSize -= 1
+          return harr(0)
+        }
+      // Store the minimum value, and remove it from heap
+      val root = harr(0)
+      harr(0) = harr(heapSize - 1)
+      heapSize -= 1
+      minHeapify(0)
+     root
+    }
+
+    /**
+     * @param k
+     * inserts a new key 'k'
+     */
+    private def insertKey(k: Int): Unit =
+    {
+      if (heapSize == capacity)
+        {
+          println(s"Overflow: Could not insertKey")
+          return
+        }
+      // First insert the new key at the end
+      heapSize += 1
+      var i = heapSize - 1
+      harr(i) = k
+
+      // Fix the min heap property if it is violated
+      while (i != 0 && harr(parent(i)) > harr(i))
+        {
+          swap(i, parent(i))
+          i = parent(i)
+        }
+    }
+
+    /**
+     * @return A utility function to check if size of heap is 1 or not
+     */
+    private def isSizeOne(): Boolean = (heapSize == 1)
+
+    /**
+     * @param x
+     * @param y
+     * A utility function to swap two elements
+     */
+    private def swap(x: Int, y: Int): Unit =
+    {
+      val temp = harr(x)
+      harr(x) = harr(y)
+      harr(y) = temp
+    }
+
+    // The main function that returns the
+    // minimum cost to connect n ropes of
+    // lengths stored in len[0..n-1]
+    def minCost(ropes: Array[Int], n: Int): Int =
+    {
+      // Initialize the result
+      var cost = 0
+
+      // Create a min heap of capcity eqal to n and put all ropes in it
+      val minHeap = new MinHeap(ropes, n, n)
+
+      // Iterate while size of hepa does n't become 1
+      while (!minHeap.isSizeOne())
+        {
+          // Extract two miminum length of ropes from min heap
+          val min = minHeap.extractMin()
+          val secMin = minHeap.extractMin()
+
+          // Update total cost
+          val tempSum = min + secMin
+          cost += (tempSum)
+
+          //Insert a new rope in min Heap with length equal to sum of two extracted minimum lengths
+          minHeap.insertKey(tempSum)
+        }
+      // Finally return total minimum cost for connecting all ropes
+      cost
+    }
+  }
 
   /**
    * @param arr
    * @return minimum cost to connect n ropes of
    *         lengths stored in len[0..n-1]
    */
-  def minCost(arr: Array[Int]): Int =
-  {
+  def minCost(arr: Array[Int]): Int = {
     // Initialize result
     var cost = 0
     // Create minheap and put all ropes in it
@@ -216,8 +245,7 @@ object MinCostSolution
     arr.foreach(elem => minHeap.addOne(elem))
 
     // Iterate while size of heap does not become 1
-    while (minHeap.size > 1)
-    {
+    while (minHeap.size > 1) {
       // Extract two minimum length ropes from min heap
       val min = minHeap.dequeue()
       val secondMin = minHeap.dequeue()
@@ -234,7 +262,13 @@ object MinCostSolution
 object MinCost extends App
 {
   val arr = Array(4, 3, 2, 6)
+  // Using  built in Min Heap
   println(MinCostSolution.minCost(arr))
   // Output: 29
   // Need to come back tomorrow for minheap implementation.
+
+  // Using custom min Heap
+  val n = arr.length
+  val instance = new MinCostSolution.MinHeap(arr, n, n)
+  println(instance.minCost(arr, n))
 }
