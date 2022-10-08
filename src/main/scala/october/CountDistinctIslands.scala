@@ -68,7 +68,7 @@ object CountDistinctIslandsSolutionOne
   /**
    * @param islands
    * @return
-   * Function that returns distinct count of islands in a given boolean 2D matrix
+   * Function that returns distinct count of islands in a given 2D matrix
    */
   def countDistinctIslands(islands: Array[Array[Int]]): Int =
   {
@@ -107,9 +107,9 @@ object CountDistinctIslandsSolutionOne
       // 2D array for the storing the horizontal and vertical
       // directions. (Up, left, down, right}
       val dirs = Array(Array(0, -1),
-                 Array(-1, 0),
-                 Array( 0, 1),
-                 Array( 1, 0))
+                       Array(-1, 0),
+                       Array( 0, 1),
+                       Array( 1, 0))
       val rows = grid.length
       val cols = grid(0).length
 
